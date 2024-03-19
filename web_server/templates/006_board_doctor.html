@@ -1,0 +1,68 @@
+{% extends "000_base_template.html" %}
+
+{% block title %}Dr. {{uname.split(' ')[-1]}} dashboard{% endblock %}
+
+{% block head %}
+    {{ super() }}
+{% endblock %}
+
+{% block login %}
+{% endblock %}
+
+{% block logout %}
+    {{ super() }}
+{% endblock %}
+
+{% block content %}
+    <div class="jumbotron" style="margin-bottom: 0px; margin-top: 0px; padding: 2rem;">
+        <div class="container">
+          <div style="width: 560px; margin-left: 10px; margin-right: auto;">
+            <div class="display-4" style="font-size: 20px; font-weight: 600;">
+                Bienvenido: Dr. {{uname}}
+            </div>
+            <hr class="my-4">
+            <button  class="btn btn-primary btn-block mb-4" onclick="location.href='/listado_dispositivos'">
+              Ver dispositivos
+            </button>
+            <p class="lead">
+              <div class="lead" style="text-align: justify; font-size: 18px;">
+                Listado de datos personales
+                dispositivos IoMT y herramientas de IA. 
+              </div>
+            </p>
+          </div>
+          <div style="width: 900px; margin-left: 10px; margin-right: auto;">
+            <table>
+              <thead>
+                <tr>
+                  <th class="col-md-1">#</th>
+                  <th class="col-md-1">First</th>
+                  <th class="col-md-1">Last</th>
+                  <th class="col-md-3">Diagnostico</th>
+                  <th class="col-md-1">Cama</th>
+                  <th class="col-md-1">Historial</th>
+                  <!-- <th class="col-md-1">Dispositivos</th> -->
+                </tr>
+              </thead>
+              <tbody>
+              {% for item in casos %}
+              <TR>
+                 <TD class="col-md-1">{{loop.index0 + 1}}</TD>
+                 <TD class="col-md-2">{{item.full_name.split(' ')[0]}}</TD>
+                 <TD class="col-md-2">{{item.full_name.split(' ')[1]}}</TD>
+                 <td class="col-md-3">Diagnostico</td>
+                 <TD class="col-md-1">BedID</TD>
+                 <!-- <TD class="col-md-2"><a href="../expediente/{{uid}}/{{item.id}}">Open</a></TD> -->
+                 <TD class="col-md-2"><a href="../expediente/{{item.id}}">Open</a></TD>
+                 <!-- <TD class="col-md-2"><a href="">Open</a></TD> -->
+              </TR>
+              {% endfor %}
+              </tbody>
+            </table>
+          </div>
+        </div>
+    </div>
+{% endblock %}
+{% block footer %}
+    {{ super() }}
+{% endblock %}

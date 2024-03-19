@@ -1,0 +1,102 @@
+{% extends "000_base_template.html" %}
+
+{% block title %}Sr./Sra. {{uname.split(' ')[-1]}} dashboard{% endblock %}
+
+{% block head %}
+    {{ super() }}
+{% endblock %}
+
+{% block login %}
+{% endblock %}
+
+{% block logout %}
+    {{ super() }}
+{% endblock %}
+
+{% block content %}
+    <div class="jumbotron" style="margin-bottom: 0px; margin-top: 0px; padding: 2rem;">
+        <div class="container">
+          <div style="width: 560px; margin-left: 10px; margin-right: auto;">
+            <div class="display-4" style="font-size: 20px; font-weight: 600;">
+                Agregar registro al expediente de {{uname}}
+            </div>
+            <hr class="my-4">
+            <div>
+                <form action="/salvarregistro/{{patId}}" method="POST">
+                    <div class="form-group row">
+                      <label for="patientFullName" class="col-sm-2 col-form-label">Paciente</label>
+                      <div class="col-sm-10">
+                        <input type="text" class="form-control" name="patientFullName" placeholder="patientFullName" value="{{uname}}" disabled>
+                      </div>
+                    </div>
+                    <div class="form-group row">
+                        <label for="nuevoMotivo" class="col-sm-2 col-form-label">Motivo</label>
+                        <div class="col-sm-10">
+                          <textarea class="form-control" name="nuevoMotivo" rows="2" placeholder="Motivo de consulta" required></textarea>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label for="nuevoRegistro" class="col-sm-2 col-form-label">Diagnostico</label>
+                        <div class="col-sm-10">
+                          <textarea class="form-control" name="nuevoRegistro" rows="3" placeholder="Ingrese el nuevo diagnostico" required></textarea>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label for="nuevaPrescripcion" class="col-sm-2 col-form-label">Prescripcion</label>
+                        <div class="col-sm-10">
+                          <textarea class="form-control" name="nuevaPrescripcion" rows="2" placeholder="1 por linea" required></textarea>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label for="nuevaIncapacidad" class="col-sm-2 col-form-label">Incapacidad</label>
+                        <div class="col-sm-10">
+                          <textarea class="form-control" name="nuevaIncapacidad" rows="2" placeholder="Nota de incapacidad" required></textarea>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                      <label for="asignarDispositivo" class="col-sm-2 col-form-label">Dispositivo</label>
+                      <div class="col-sm-10">
+                        <select id ="asignarDispositivo" name="asignarDispositivo" onchange="device_data(this.value)">
+                          <option value="" selected>Sin dispositivo</option>
+                          {% for dispositivo in dispositivos %}
+                          <option value="{{dispositivo.device_number}}">{{dispositivo.device_number}} - {{dispositivo.device_type}}</option>
+                          {% endfor %}
+                        </select>
+                      </div>
+                    </div>
+                    <div class="form-group row" id="opcionales_dispositivo" style="display: none;">
+                      <label class="col-sm-10 col-form-label">Datos opcionales del dispositivo</label>
+                      <div class="form-group row">
+                        <label for="periodoAsignado" class="col-sm-2 col-form-label">Periodo</label>
+                        <div class="col-sm-10">
+                          <textarea class="form-control" name="periodoAsignado" rows="1" placeholder="Periodo de asignación" id="periodo_asignado"></textarea>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="form-group row">
+                      <div class="col-sm-10">
+                        <button type="submit" class="btn btn-primary">Salvar entrada</button>
+                      </div>
+                    </div>
+                  </form>
+            </div>
+          </div>
+        </div>
+    </div>
+    <script>
+      function device_data(device_number){
+        if (device_number == ""){
+          document.getElementById('opcionales_dispositivo').style.display='none';
+          document.getElementById('periodo_asignado').value = '';
+          document.getElementById('periodo_asignado').required = false;
+          return;
+        }
+        document.getElementById('opcionales_dispositivo').style.display='contents';
+        document.getElementById('periodo_asignado').required = true;
+
+      }
+    </script>
+{% endblock %}
+{% block footer %}
+    {{ super() }}
+{% endblock %}

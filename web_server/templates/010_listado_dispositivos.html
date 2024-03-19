@@ -1,0 +1,157 @@
+{% extends "000_base_template.html" %}
+
+{% block head %}
+    {{ super() }}
+{% endblock %}
+
+{% block login %}
+{% endblock %}
+
+{% block logout %}
+    {{ super() }}
+{% endblock %}
+
+{% block content %}
+    <div class="jumbotron" style="margin-bottom: 0px; margin-top: 0px; padding: 2rem;">
+        <div class="container">
+          <div style="width: 560px; margin-left: 10px; margin-right: auto;">
+            <hr class="my-4">
+            <p class="lead">
+              <div class="lead" style="text-align: justify; font-size: 18px;">
+                Listado de los dispositivos IoMT
+              </div>
+            </p>
+            <button  class="btn btn-primary btn-block mb-4" onclick="mostrarOpciones()">
+            Modificar
+            </button><br>
+          
+            <div id="optionBlock" style="width: fit-content; display: none; margin-right: auto; margin-left: 10px;">
+              <div id="modificarDisp">
+                <button  class="btn btn-primary btn-block mb-4" onclick="mostrarConfig(2)">
+                  Asignar
+                </button>
+                <button  class="btn btn-primary btn-block mb-4" onclick="mostrarConfig(1)">
+                  Modificar frecuencia de muestreo
+                </button>
+              </div><br>
+
+              <form action="/cambiar_iot" method="POST">
+                <div id="selectPaciente" style="display: none;">
+                  <label>Paciente:</label>
+                  <select id ="selectPacientes" name="selectPacientes">
+                    {% for cuenta in cuentas %}
+                    {% if cuenta.role_id == 1 %}
+                    <option value="{{cuenta.id}}">{{cuenta.full_name}}</option>
+                    {% endif %}
+                    {% endfor %}
+                  </select><br><br>
+                </div>
+
+                <div id="selectDisp" style="display: none;">
+                  <label>Dispositivo:</label>
+                  <select id ="asignarDispositivo" name="asignarDispositivo">
+                    <option value="" selected>Sin dispositivo</option>
+                    {% for dispositivo in info_dispositivos %}
+                    <option value='{{dispositivo.device_number}}'>{{dispositivo.device_number}} - {{dispositivo.device_type}}</option>
+                    {% endfor %}
+                  </select><br><br>
+                </div>
+
+                <div id="asignarFrecuencia" style="display: none;">
+                  <label>Frecuencia:</label>
+                  <input type="number" id="frecuencia" name="frecuencia" placeholder="en milisegundos" min="500" max="60000" oninput="validity.valid||(value='500');"><br>
+                  <br>
+                </div>
+
+                <div id="asignarPeriodo" style="display: none;">
+                  <label for="periodo">Periodo:</label>
+                  <input type="text" id="periodo" name="periodo" placeholder="Periodo de asignación"><br>
+                  <br>
+                </div>
+
+                <div id="mandarPost" style="display: none;">
+                  <button type="submit" id="botonPeriodo" class="btn btn-secondary btn-block mb-4" value="Submit">
+                    ⯈
+                  </button>
+                </div>
+              </form>
+
+            </div>
+          </div>
+          <div style="width: 1000px; margin-left: 10px; margin-right: auto;">
+            <table>
+              <thead>
+                <tr>
+                  <th class="col-md-1">#</th>
+                  <th class="col-md-2">Número dispositivo</th>
+                  <th class="col-md-2">Tipo del dispositivo</th>
+                  <th class="col-md-2">Asignado a</th>
+                  <th class="col-md-2">Periodo de asignación</th>
+                  <th class="col-md-2">Ver monitoreo</th>
+                  <th class="col-md-1">Configuración actual</th>
+                  <!-- <th class="col-md-1">Dispositivos</th> -->
+                </tr>
+              </thead>
+              <tbody>
+              {% for item in info_dispositivos %}
+              <TR>
+                 <TD class="col-md-1">{{loop.index0 + 1}}</TD>
+                 <TD class="col-md-1">{{item.device_number}}</TD>
+                 <TD class="col-md-1">{{item.device_type}}</TD>
+                 <td class="col-md-1">
+                  {% if item.assigned_to %}
+                  {{cuentas[item.assigned_to - 1].full_name}}
+                  {% else %}
+                  None
+                  {% endif %}
+                </td>
+                 <TD class="col-md-2">{{item.assigned_period}}</TD>
+                 <!-- <TD class="col-md-2"><a href="../expediente/{{uid}}/{{item.id}}">Open</a></TD> -->
+                 <TD class="col-md-2"><a href="http://{{item.remote_ip}}" target="_blank">Open</a></TD>
+                 <TD class="col-md-1"><a href="http://{{item.remote_ip}}/configuracion" target="_blank">Ver</a></TD>
+                 <!-- <TD class="col-md-2"><a href="">Open</a></TD> -->
+              </TR>
+              {% endfor %}
+              </tbody>
+            </table>
+          </div>
+        </div>
+    </div>
+    <script>
+      function mostrarOpciones(){
+        document.getElementById('optionBlock').style.display='contents';
+
+      }
+
+      function mostrarConfig(op){
+        if (op == 1){
+          document.getElementById('selectDisp').style.display='contents';
+
+          document.getElementById('asignarFrecuencia').style.display='contents';
+          document.getElementById('frecuencia').required=true;
+
+          document.getElementById('selectPaciente').style.display='none';
+          document.getElementById('asignarPeriodo').style.display='none';
+          document.getElementById('periodo').required=false;
+          document.getElementById('periodo').value='';
+        }
+        else if (op == 2){
+          document.getElementById('selectDisp').style.display='contents';
+
+          document.getElementById('asignarFrecuencia').style.display='none';
+          document.getElementById('frecuencia').required=false;
+          document.getElementById('frecuencia').value='';
+
+          document.getElementById('selectPaciente').style.display='contents';
+          document.getElementById('asignarPeriodo').style.display='contents';
+          document.getElementById('periodo').required=true;
+        }
+        document.getElementById('selectPaciente').required=true;
+        document.getElementById('asignarDispositivo').required=true;
+        document.getElementById('mandarPost').style.display='contents';
+      }
+    </script>
+{% endblock %}
+{% block footer %}
+    {{ super() }}
+{% endblock %}

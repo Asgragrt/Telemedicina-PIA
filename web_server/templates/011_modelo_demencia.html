@@ -1,0 +1,125 @@
+{% extends "000_base_template.html" %}
+
+{% block title %}Index{% endblock %}
+
+{% block head %}
+    {{ super() }}
+{% endblock %}
+
+{% block login %}
+{% endblock %}
+
+{% block logout %}
+    {{ super() }}
+{% endblock %}
+
+{% block content %}
+<!DOCTYPE html>
+<html lang="en-US">
+  <head>
+    <meta charset="utf-8" />
+    <title>Diagnóstico de nivel de demencia</title>
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@latest/dist/tf.min.js" async></script>
+  </head>
+  
+  <body>
+    <div class="jumbotron" style="margin-bottom: 0px;">
+        <div class="container">
+            <div style="width: 650px; margin-left: 10px; margin-right: auto; margin-top: 50px;">
+                <h1>Diagnóstico de nivel de demencia</h1>
+                <label style="width: 120px; display: inline-block; text-align: right;">Cargar imagen: </label>
+                    <input class="btn btn-primary btn-block mb-4" type="file" onchange="onFileSelected(event)">    <br>
+                <label id='cargada' style="width: 200px; display: inline-block; text-align: right; display: none;">Imagen cargada</label> <br> 
+                <label style="width: 120px; display: inline-block; text-align: right;">Analizar imagen: </label>
+                    <button class="btn btn-secondary btn-block mb-4" onclick="predict()">Analizar</button>     <br>
+                <img id="myimage" height="200">
+                <div>Prediccion: <span id="result"></span></div>
+
+                <button class="btn btn-primary btn-block mb-4" onclick="history.back()" style="margin-top: 20px">⯇ Regresar al paciente</button>
+            </div>
+        </div>
+    </div>
+    <script async>
+    
+    function onFileSelected(event) {
+        var selectedFile = event.target.files[0];
+        var reader = new FileReader();
+        var imgtag = document.getElementById("myimage");
+        imgtag.title = selectedFile.name;
+        reader.onload = function(event) {imgtag.src = event.target.result;};
+        reader.readAsDataURL(selectedFile);
+        document.getElementById("result").innerHTML = "";
+        document.getElementById('cargada').style.display='contents';
+    }
+
+    function preprocessImage(image) {
+        let tensor = tf.browser.fromPixels(image).resizeNearestNeighbor([180, 180]).toFloat();
+        let factor = tf.scalar(1.0 / 255.0);
+
+
+        //RGB to gray scale per ITU-R recommendations
+        let rFactor = tf.scalar(0.2989);
+        let gFactor = tf.scalar(0.5870);
+        let bFactor = tf.scalar(0.1140);
+
+        r = tensor.slice([0,0,0], [tensor.shape[0], tensor.shape[1], 1]);
+        g = tensor.slice([0,0,1], [tensor.shape[0], tensor.shape[1], 1]);
+        b = tensor.slice([0,0,2], [tensor.shape[0], tensor.shape[1], 1]);
+
+        tensor = r.mul(rFactor).add(g.mul(gFactor)).add(b.mul(bFactor));
+        return tensor.div(factor).expandDims();
+    }
+
+    function show_prediction() {
+        let prediction = predictions.indexOf(Math.max.apply(Math, predictions));
+        let s;
+        switch(prediction){
+            case 0:
+                s = 'Moderate Demented';
+                break;
+            case 1:
+                s = 'Non Demented';
+                break;
+            case 2:
+                s = 'Very Mild Demented';
+                break;
+            case 3:
+                s = 'Mild Demented';
+                break;
+            default:
+                s = 'Something went wrong!';
+        }
+
+        document.getElementById("result").innerHTML = s;
+    
+    }
+
+    async function predict() {
+        let image = document.getElementById("myimage");
+        await load_model();      
+        let tensor = preprocessImage(image);
+        predictions = await model.predict(tensor).data().then();
+        show_prediction();
+    }
+
+    async function load_model(){
+        const uploadJSONInput = "{{ model_url }}";
+        const uploadWeightsInput = "{{ weights_url }}";
+
+        if(typeof model != 'undefined'){
+            return;
+        }
+        model = await tf.loadLayersModel(
+            uploadJSONInput, uploadWeightsInput
+        ).then(
+                alert("Modelo cargado")
+            );
+    }
+
+    </script>
+  </body>
+</html>
+{% endblock %}
+{% block footer %}
+    {{ super() }}
+{% endblock %}

@@ -1,0 +1,48 @@
+{% extends "000_base_template.html" %}
+
+{% block title %}Index{% endblock %}
+
+{% block head %}
+    {{ super() }}
+{% endblock %}
+
+{% block dashbboard %}
+{% endblock %}
+
+{% block login %}
+{% endblock %}
+
+{% block logout %}
+{% endblock %}
+
+{% block content %}
+    <div class="jumbotron" style="margin-bottom: 0px;">
+        <div class="container">
+          <div style="width: 560px; margin-left: 10px; margin-right: auto;">
+            <h5 class="display-4">
+                Ingresar
+            </h5>
+            <form action="/gaccess" method="POST">
+              <!-- Email input -->
+              <div class="form-outline mb-4">
+                <input type="text" id="form2Example1" name="uname" class="form-control" />
+                <label class="form-label" for="form2Example1">Username</label>
+              </div>
+            
+              <!-- Password input -->
+              <div class="form-outline mb-4">
+                <input type="password" id="form2Example2" name="upwrd" class="form-control" />
+                <label class="form-label" for="form2Example2">Password</label>
+              </div>
+          
+              <!-- Submit button -->
+              <button type="submit" class="btn btn-primary btn-block mb-4">Sign in</button>
+            
+            </form>
+          </div>
+        </div>
+    </div>
+{% endblock %}
+{% block footer %}
+    {{ super() }}
+{% endblock %}

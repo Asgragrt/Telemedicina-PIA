@@ -1,0 +1,62 @@
+{% extends "000_base_template.html" %}
+
+{% block title %}Sr./Sra. {{uname.split(' ')[-1]}} dashboard{% endblock %}
+
+{% block head %}
+    {{ super() }}
+{% endblock %}
+
+{% block login %}
+{% endblock %}
+
+{% block logout %}
+    {{ super() }}
+{% endblock %}
+
+{% block content %}
+    <div class="jumbotron" style="margin-bottom: 0px; margin-top: 0px; padding: 2rem;">
+        <div class="container">
+          <div style="width: 560px; margin-left: 10px; margin-right: auto;">
+            <div class="display-4" style="font-size: 20px; font-weight: 600;">
+                Dispositivo: {{devID}} - {{devType}}
+            </div>
+            <hr class="my-4">
+            <p class="lead">
+              <div class="lead col-md-10" style="text-align: justify; font-size: 18px; display: inline;">
+                Configuracion actual
+              </div>
+              
+              <div style="display: inline;">
+                <a class="btn btn-link" href="../visualizar/{{devID}}" target="_blank">Respuesta en tiempo real</a>
+              </div>
+
+            </p>
+          </div>
+          <div style="width: 1200px; margin-left: 10px; margin-right: auto;">
+            <table>
+              <thead>
+                <tr>
+                  <th class="col-md-2">Paciente asignado</th>
+                  <th class="col-md-2">Fecha</th>
+                  <th class="col-md-2">Motivo</th>
+                  <th class="col-md-2">Diagnostico</th>
+                  <th class="col-md-2">Duracion</th>
+                </tr>
+              </thead>
+              <tbody>
+              <TR>
+                  <TD class="col-md-2">{{uname}}</TD>
+                  <TD class="col-md-2">{{assigned_date}}</TD>
+                  <TD class="col-md-2">{{consulta.motivo}}</TD>
+                  <TD class="col-md-2">{{consulta.diagnostico}}</TD>
+                  <TD class="col-md-2">{{assigned_period}}</TD>
+              </TR>
+              </tbody>
+            </table>
+          </div>
+        </div>
+    </div>
+{% endblock %}
+{% block footer %}
+    {{ super() }}
+{% endblock %}

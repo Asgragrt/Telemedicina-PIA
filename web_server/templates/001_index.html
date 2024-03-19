@@ -1,0 +1,38 @@
+{% extends "000_base_template.html" %}
+
+{% block title %}Index{% endblock %}
+
+{% block head %}
+    {{ super() }}
+{% endblock %}
+
+{% block dashbboard %}
+{% endblock %}
+
+{% block login %}
+    {{ super() }}
+{% endblock %}
+
+{% block logout %}
+{% endblock %}
+
+{% block content %}
+    <div class="jumbotron" style="margin-bottom: 0px;">
+        <div class="container">
+          <div style="width: 560px; margin-left: 10px; margin-right: auto; margin-top: 50px;">
+            <h1 class="display-4">
+                Telemedicina <br> Ago-Dic 2023
+            </h1>
+            <hr class="my-4">
+            <p class="lead" style="text-align: justify; font-size: 18px;">
+                Plataforma para gestionar historiales clinicos, governanza de datos, configuracion de dispositivos IoMT y herramientas de IA. 
+            </p>
+            <p class="lead">
+            </p>
+          </div>
+        </div>
+    </div>
+{% endblock %}
+{% block footer %}
+    {{ super() }}
+{% endblock %}

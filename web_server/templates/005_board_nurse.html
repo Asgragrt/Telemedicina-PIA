@@ -1,0 +1,65 @@
+{% extends "000_base_template.html" %}
+
+{% block title %}Index{% endblock %}
+
+{% block head %}
+    {{ super() }}
+{% endblock %}
+
+{% block login %}
+{% endblock %}
+
+{% block logout %}
+  {{ super() }}
+{% endblock %}
+
+{% block content %}
+    <div class="jumbotron" style="margin-bottom: 0px; margin-top: 0px; padding: 2rem;">
+        <div class="container">
+          <div style="width: 560px; margin-left: 10px; margin-right: auto;">
+            <div class="display-4" style="font-size: 20px; font-weight: 600;">
+                Bienvenido: {{uname}}
+            </div>
+            <hr class="my-4">
+            <p class="lead">
+              
+            </p>
+            <div style="width: 900px; margin-left: 10px; margin-right: auto;">
+              <div class="lead" style="text-align: justify; font-size: 18px;">
+                Pacientes actuales
+              </div>
+              <hr>
+              <table>
+                <thead>
+                  <tr>
+                    <th class="col-md-1">#</th>
+                    <th class="col-md-1">First</th>
+                    <th class="col-md-1">Last</th>
+                    <th class="col-md-1">Cama</th>
+                    <th class="col-md-2">Diagnostico</th>
+                    <th class="col-md-2">Prescripcion</th>
+                    <th class="col-md-2">Acciones</th>
+                  </tr>
+                </thead>
+                <tbody>
+                {% for item in pacientes %}
+                <TR>
+                   <TD class="col-md-1">{{loop.index0 + 1}}</TD>
+                   <TD class="col-md-1">{{item.full_name.split(' ')[0]}}</TD>
+                   <TD class="col-md-1">{{item.full_name.split(' ')[1]}}</TD>
+                   <TD class="col-md-1">BedID</TD>
+                   <td class="col-md-2">Diagnostico</td>
+                   <td class="col-md-2">Prescripcion</td>
+                   <TD class="col-md-2"><button>Cambiar cama</button></TD>
+                </TR>
+                {% endfor %}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+    </div>
+{% endblock %}
+{% block footer %}
+    {{ super() }}
+{% endblock %}

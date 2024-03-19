@@ -1,0 +1,79 @@
+{% extends "000_base_template.html" %}
+
+{% block title %}Index{% endblock %}
+
+{% block head %}
+    {{ super() }}
+{% endblock %}
+
+{% block login %}
+{% endblock %}
+
+{% block logout %}
+  {{ super() }}
+{% endblock %}
+
+{% block content %}
+    <div class="jumbotron" style="margin-bottom: 0px; margin-top: 0px; padding: 2rem;">
+        <div class="container">
+          <div style="width: 560px; margin-left: 10px; margin-right: auto;">
+            <div class="display-4" style="font-size: 20px; font-weight: 600;">
+                Bienvenido: {{uname}}
+            </div>
+            <hr class="my-4">
+            <p class="lead">
+            </p>
+          </div>
+          <div style="width: 900px; margin-left: 10px; margin-right: auto;">
+            <div class="lead" style="text-align: justify; font-size: 18px;">
+              Historial de consultas
+            </div>
+            <hr>
+            <table>
+              <thead>
+                <tr>
+                  <th class="col-md-1">#</th>
+                  <th class="col-md-1">Fecha</th>
+                  <th class="col-md-1">Motivo</th>
+                  <th class="col-md-3">Diagnostico</th>
+                  <th class="col-md-1">Prescripcion</th>
+                  <th class="col-md-1">Incapacidad</th>
+                  <th class="col-md-1">Dispositivo</th>
+                </tr>
+              </thead>
+              <tbody>
+              {% for item in consultas %}
+              <TR>
+                 <TD class="col-md-1">{{loop.index0 + 1}}</TD>
+                 <TD class="col-md-1">{{item.created_on}}</TD>
+                 <TD class="col-md-1">{{item.motivo}}</TD>
+                 <TD class="col-md-3">{{item.diagnostico}}</TD>
+                 <TD class="col-md-1">{{item.prescripcion}}</TD>
+                 <TD class="col-md-1">{{item.incapacidad}}</TD>
+                 <TD class="col-md-1">{{item.dispositivo}}</TD>
+              </TR>
+              {% endfor %}
+              </tbody>
+            </table>
+          </div>
+        </div>
+    </div>
+{% endblock %}
+{% block footer %}
+<footer class="jumbotron" style="background-color: #8538f2; border-radius: 0px; margin-bottom: 0px; padding: 2rem;">
+    <div class="container" style="background-color: transparent; text-align: left;">
+      <div class="row">
+        <div class="col-md-4">
+            <h1 style="color: #ffcc00;">
+              TeleMed E2023
+            </h1>
+        </div>
+        <div class="col-md-4" style="color: white; text-align: left;">
+            <b>Contacto</b>
+            <hr style="margin: 0px;">
+            contact@mail.com
+        </div>
+      </div>
+    </div>
+</footer>
+{% endblock %}
